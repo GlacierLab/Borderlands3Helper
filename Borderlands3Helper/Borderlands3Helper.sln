@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Borderlands3Helper", "Borderlands3Helper.vbproj", "{D0775AA8-4322-4F05-97EA-FED3276F8F1E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0775AA8-4322-4F05-97EA-FED3276F8F1E}.Debug|x64.ActiveCfg = Debug|x64
+		{D0775AA8-4322-4F05-97EA-FED3276F8F1E}.Debug|x64.Build.0 = Debug|x64
+		{D0775AA8-4322-4F05-97EA-FED3276F8F1E}.Release|x64.ActiveCfg = Release|x64
+		{D0775AA8-4322-4F05-97EA-FED3276F8F1E}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1A20CB8F-6F3E-4BA6-BA84-6BDB181CA309}
+	EndGlobalSection
+EndGlobal
