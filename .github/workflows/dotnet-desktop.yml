@@ -1,0 +1,26 @@
+name: dotnet package
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1
+        with:
+         dotnet-version: '6.0.x'
+         include-prerelease: true
+      - name: Install dependencies
+        run: dotnet restore Borderlands3Helper\Borderlands3Helper.vbproj
+      - name: Build
+        run: dotnet publish -p:PublishReadyToRun=true -p:PublishSingleFile=true --no-self-contained -r win-x64 -c Release Borderlands3Helper\Borderlands3Helper.vbproj
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+         name:  Borderlands3Helper
+         path:  Borderlands3Helper\bin\Release\net6.0-windows\win-x64\publish
+        

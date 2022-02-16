@@ -1,4 +1,5 @@
 ﻿Imports System.Environment
+Imports System.Reflection
 Imports System.IO
 Class MainWindow
 #Disable Warning CA2101 ' Specify marshaling for P/Invoke string arguments
@@ -16,10 +17,13 @@ Class MainWindow
     End Function
     Dim CurrentAPI As String
     ReadOnly Cache As String = GetEnvironmentVariable("LOCALAPPDATA") + "\Borderlands 3\Saved"
-    ReadOnly Path As String = "D:\QINLILI\Documents\My Games\Borderlands 3\Saved\Config\WindowsNoEditor\GameUserSettings.ini"
+    ReadOnly Path As String = GetFolderPath（SpecialFolder.MyDocuments） + "\My Games\Borderlands 3\Saved\Config\WindowsNoEditor\GameUserSettings.ini"
+    ReadOnly configPath As String = GetFolderPath（SpecialFolder.MyDocuments） + "\My Games\Borderlands 3\Saved\Config\WindowsNoEditor\Engine.ini"
     Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        'MsgBox(String.Join(",", Assembly.GetExecutingAssembly().GetManifestResourceNames().ToArray()))
         RefreshAPI()
         CalculateCache()
+        DetectConfig()
     End Sub
     Private Sub CalculateCache()
         Dim FileSize As ULong
@@ -34,6 +38,21 @@ Class MainWindow
             ClearCache.Content = "No Cache Found"
         End Try
     End Sub
+    Private Sub DetectConfig()
+        If File.Exists(configPath) Then
+            Dim fInfo As New FileInfo(configPath)
+            If fInfo.IsReadOnly Then
+                PatchConfig.Content = "Already Patched"
+            Else
+                PatchConfig.Content = "Patch Now"
+                PatchConfig.IsEnabled = True
+            End If
+        Else
+            PatchConfig.Content = "Patch Now"
+            PatchConfig.IsEnabled = True
+        End If
+    End Sub
+
     Dim DoubleBytes As Double
     Public Function FormatBytes(BytesCaller As ULong) As String
         Try
@@ -90,5 +109,25 @@ Class MainWindow
         Catch
 
         End Try
+    End Sub
+
+    Private Async Sub PatchConfig_Click(sender As Object, e As RoutedEventArgs) Handles PatchConfig.Click
+        Dim asm As Assembly = Assembly.GetExecutingAssembly()
+        If File.Exists(configPath) Then
+            File.Delete(configPath)
+        End If
+        Dim fileStream = File.Create(configPath)
+        Await asm.GetManifestResourceStream("Borderlands3Helper.Engine.ini").CopyToAsync(fileStream)
+        fileStream.Close()
+        Dim fInfo As New FileInfo(configPath)
+        fInfo.IsReadOnly = True
+        PatchConfig.Content = "Patch Success"
+        PatchConfig.IsEnabled = False
+    End Sub
+
+    Private Sub Github_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Github.MouseDown
+        Dim startInfo As New ProcessStartInfo("https://github.com/GlacierLab/Borderlands3Helper")
+        startInfo.UseShellExecute = True
+        Process.Start(startInfo)
     End Sub
 End Class
